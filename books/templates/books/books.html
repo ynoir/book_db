@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<table id="table" data-page-length='25'>
+    <thead>
+        <td>Name</td>
+        <td>Series</td>
+        <td>Author</td>
+        <td>Rating</td>
+        <td>Tags</td>
+        <td>Status</td>
+    </thead>
+    <tbody>
+        {% for book in books %}
+            <tr>
+                <td>{{ book.name }}</td>
+                <td>{{ book.series.name }}</td>
+                <td>
+                    <a href="/books/authors/{{book.author.id}}">{{ book.author.name }}</a>
+                </td>
+                <td>{{ book.rating }}</td>
+                <td>
+                    <ul>
+                        {% for tag in book.tags.all %}
+                            <li>
+                                <a href="/books/tags/{{tag.id}}">{{ tag.name }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>
+                    <a href="/books/statuss/{{book.status.id}}">{{ book.status.name }}</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}

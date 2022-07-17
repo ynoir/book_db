@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<table id="table" data-page-length='100'>
+    <thead>
+        <td>Name</td>
+    </thead>
+    <tbody>
+        {% for status in statuss %}
+            <tr>
+                <td>
+                    <a href="/books/statuss/{{status.id}}">{{ status.name }}</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}

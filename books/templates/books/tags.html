@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<table id="table" data-page-length='100'>
+    <thead>
+        <td>Name</td>
+    </thead>
+    <tbody>
+        {% for tag in tags %}
+            <tr>
+                <td>
+                    <a href="/books/tags/{{tag.id}}">{{ tag.name }}</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}

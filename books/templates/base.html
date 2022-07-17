@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+        <script
+			  src="https://code.jquery.com/jquery-3.6.0.min.js"
+			  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+			  crossorigin="anonymous"></script>
+        <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <a href="/admin/books" target="_blank">Edit</a> |
+        <a href="/books/books">Books</a> |
+        <a href="/books/authors">Authors</a> |
+        <a href="/books/tags">Tags</a> |
+        <a href="/books/statuss">Status</a>
+        <hr/>
+
+        {% block content %}
+        {% endblock content %}
+
+    <script>
+        $(document).ready( function () {
+            $('#table').DataTable();
+        } );
+    </script>
+    </body>
+</html>
