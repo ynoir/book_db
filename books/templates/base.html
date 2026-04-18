@@ -1,23 +1,75 @@
 <html>
     <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+        <style>
+            :root {
+                --primary: #2563eb;
+                --bg: #f8fafc;
+                --text: #1e293b;
+                --border: #e2e8f0;
+                --card-bg: #ffffff;
+            }
+            body { 
+                font-family: 'Inter', -apple-system, sans-serif; 
+                background-color: var(--bg);
+                color: var(--text);
+                margin: 0;
+                padding: 20px;
+                line-height: 1.5;
+            }
+            nav {
+                background: var(--card-bg);
+                padding: 1rem 1.5rem;
+                border-radius: 12px;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                margin-bottom: 2rem;
+                display: flex;
+                gap: 1rem;
+                align-items: center;
+                flex-wrap: wrap;
+            }
+            nav a {
+                text-decoration: none;
+                color: #64748b;
+                font-weight: 500;
+                transition: color 0.2s;
+                padding: 0.5rem 0.75rem;
+                border-radius: 6px;
+            }
+            nav a:hover {
+                color: var(--primary);
+                background: #eff6ff;
+            }
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; display: none; }
+        </style>
         <script
-			  src="https://code.jquery.com/jquery-3.6.0.min.js"
-			  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-			  crossorigin="anonymous"></script>
+                          src="https://code.jquery.com/jquery-3.6.0.min.js"
+                          integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+                          crossorigin="anonymous"></script>
         <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
     </head>
     <body>
-        <a href="/admin/books" target="_blank">Edit</a> |
-        <a href="/books/books">Books</a> |
-        <a href="/books/authors">Authors</a> |
-        <a href="/books/tags">Tags</a> |
-        <a href="/books/statuss">Status</a>
-        <hr/>
+        <div class="container">
+            <nav>
+                <a href="/admin/books" target="_blank" style="background: var(--primary); color: white;">Admin Edit</a>
+                <a href="/books/books">Books</a>
+                <a href="/books/authors">Authors</a>
+                <a href="/books/seriess">Series</a>
+                <a href="/books/tags">Tags</a>
+                <a href="/books/statuss">Status</a>
+                <a href="/books/export">Export</a>
+            </nav>
 
-        {% block content %}
-        {% endblock content %}
-
+            {% block content %}
+            {% endblock content %}
+        </div>
     <script>
         $(document).ready( function () {
             $('#table').DataTable();

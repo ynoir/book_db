@@ -1,38 +1,172 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+    .table-container {
+        background: var(--card-bg);
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    }
+    #table {
+        border-collapse: separate;
+        border-spacing: 0;
+        width: 100% !important;
+        border: none;
+    }
+    #table thead th {
+        background: #f1f5f9;
+        color: #475569;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        padding: 12px 16px;
+        border: none;
+    }
+    #table tbody td {
+        padding: 16px;
+        vertical-align: middle;
+        border-bottom: 1px solid var(--border);
+    }
+    #table tbody tr:hover {
+        background-color: #f8fafc;
+    }
+    .cover-img {
+        width: 60px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 6px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        transition: transform 0.2s;
+    }
+    .cover-img:hover {
+        transform: scale(1.1);
+    }
+    .tag-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+    .tag-item a {
+        background: #e0f2fe;
+        color: #0369a1;
+        font-size: 0.7rem;
+        padding: 2px 8px;
+        border-radius: 9999px;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .tag-item a:hover { background: #bae6fd; }
+    
+    .status-badge {
+        font-size: 0.75rem;
+        padding: 4px 10px;
+        border-radius: 6px;
+        background: #f1f5f9;
+        color: #475569;
+        text-decoration: none;
+        display: inline-block;
+    }
+    
+    .book-title {
+        color: var(--text);
+        font-weight: 600;
+        text-decoration: none;
+    }
+    .book-title:hover { color: var(--primary); }
+    
+    .metadata-link {
+        color: #64748b;
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+    .metadata-link:hover { color: var(--primary); text-decoration: underline; }
+
+    .loading-cover {
+        font-size: 0.7rem;
+        color: #94a3b8;
+        font-style: italic;
+    }
+</style>
+
+<div class="table-container">
 <table id="table" data-page-length='25'>
     <thead>
-        <td>Name</td>
-        <td>Series</td>
-        <td>Author</td>
-        <td>Rating</td>
-        <td>Tags</td>
-        <td>Status</td>
+        <tr>
+            <th>Cover</th>
+            <th>Name</th>
+            <th>Series</th>
+            <th>Author</th>
+            <th>Rating</th>
+            <th>Tags</th>
+            <th>Status</th>
+        </tr>
     </thead>
     <tbody>
         {% for book in books %}
             <tr>
-                <td>{{ book.name }}</td>
-                <td>{{ book.series.name }}</td>
-                <td>
-                    <a href="/books/authors/{{book.author.id}}">{{ book.author.name }}</a>
+                <td class="cover-cell" data-book-id="{{ book.id }}">
+                    {% if book.cover_image %}
+                        <img src="{{ book.cover_image.url }}" alt="{{ book.name }}" class="cover-img">
+                    {% elif book.image_url == 'none' %}
+                        <span class="loading-cover">No Cover</span>
+                    {% else %}
+                        <span class="loading-cover">Loading...</span>
+                    {% endif %}
                 </td>
-                <td>{{ book.rating }}</td>
                 <td>
-                    <ul>
+                    <a href="/admin/books/book/{{book.id}}/change/" target="_blank" class="book-title">{{ book.name }}</a>
+                </td>
+                <td>
+                    {% if book.series %}
+                        <a href="/books/seriess/{{book.series.id}}" class="metadata-link">{{ book.series.name }}</a>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="/books/authors/{{book.author.id}}" class="metadata-link">{{ book.author.name }}</a>
+                </td>
+                <td>
+                    <span style="color: #f59e0b; font-weight: 600;">★ {{ book.rating }}</span>
+                </td>
+                <td>
+                    <ul class="tag-list">
                         {% for tag in book.tags.all %}
-                            <li>
+                            <li class="tag-item">
                                 <a href="/books/tags/{{tag.id}}">{{ tag.name }}</a>
                             </li>
                         {% endfor %}
                     </ul>
                 </td>
                 <td>
-                    <a href="/books/statuss/{{book.status.id}}">{{ book.status.name }}</a>
+                    <a href="/books/statuss/{{book.status.id}}" class="status-badge">{{ book.status.name }}</a>
                 </td>
             </tr>
         {% endfor %}
     </tbody>
 </table>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('.cover-cell .loading-cover:contains("Loading...")').each(function() {
+            var cell = $(this).closest('.cover-cell');
+            var bookId = cell.data('book-id');
+            var bookName = cell.next().find('a').text();
+
+            $.get('/books/books/fetch-cover/' + bookId + '/', function(data) {
+                if (data.image_url) {
+                    cell.html('<img src="' + data.image_url + '" alt="' + bookName + '" class="cover-img">');
+                } else {
+                    cell.html('<span class="loading-cover">No Cover</span>');
+                }
+            }).fail(function() {
+                cell.html('<span class="loading-cover">Error</span>');
+            });
+        });
+    });
+</script>
 {% endblock content %}

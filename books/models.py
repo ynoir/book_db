@@ -33,5 +33,8 @@ class Book(models.Model):
     rating = models.IntegerField(default=0)
     series = models.ForeignKey(Series, on_delete=models.DO_NOTHING, blank=True, null=True)
     tags = models.ManyToManyField(Tag)
+    isbn = models.CharField(max_length=20, blank=True, null=True)
+    image_url = models.URLField(blank=True, null=True)
+    cover_image = models.ImageField(upload_to='covers/', blank=True, null=True)
     def __str__(self):
         return self.name
