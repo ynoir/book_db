@@ -1,1 +1,14 @@
-<a href="/books/books">books</a>
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="padding: 40px 0;">
+    <h1 style="font-size: 1.5rem; font-weight: 500; color: var(--text); margin-bottom: 0.5rem;">Library Database</h1>
+    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem;">A simple repository for book metadata and tracking.</p>
+    
+    <div style="border-top: 1px solid var(--border); padding-top: 2rem;">
+        <a href="/books/books" style="color: var(--text); text-decoration: none; font-weight: 500; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 8px;">
+            Browse Collections <span>&rarr;</span>
+        </a>
+    </div>
+</div>
+{% endblock content %}

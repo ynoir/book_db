@@ -3,93 +3,128 @@
 {% block content %}
 <style>
     .table-container {
-        background: var(--card-bg);
-        padding: 1.5rem;
-        border-radius: 12px;
-        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        background: transparent;
+        padding: 0;
+        border: none;
     }
     #table {
-        border-collapse: separate;
-        border-spacing: 0;
+        border-collapse: collapse;
         width: 100% !important;
-        border: none;
+        background: transparent;
+        --border: none;
     }
     #table thead th {
-        background: #f1f5f9;
-        color: #475569;
+        background: transparent;
+        color: var(--text-muted);
         text-transform: uppercase;
-        font-size: 0.75rem;
+        font-size: 13px;
         font-weight: 600;
-        letter-spacing: 0.05em;
-        padding: 12px 16px;
+        letter-spacing: 0.1em;
+        padding: 16px 0;
         border: none;
+        border-bottom: 2px solid var(--border);
     }
     #table tbody td {
-        padding: 16px;
-        vertical-align: middle;
+        padding: 5px 0;
+        vertical-align: top;
         border-bottom: 1px solid var(--border);
+        color: var(--text);
+        font-size: 16px;
+    }
+    .cover-cell {
+        padding-right: 40px !important;
+        width: 120px;
     }
     #table tbody tr:hover {
-        background-color: #f8fafc;
+        background-color: #fafafa;
     }
     .cover-img {
-        width: 60px;
-        height: 80px;
+        width: 120px;
+        height: 168px;
         object-fit: cover;
-        border-radius: 6px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        transition: transform 0.2s;
-    }
-    .cover-img:hover {
-        transform: scale(1.1);
+        border-radius: 0;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        border: 1px solid var(--border);
     }
     .tag-list {
         display: flex;
-        flex-wrap: wrap;
+        flex-direction: column;
         gap: 4px;
         padding: 0;
         margin: 0;
         list-style: none;
     }
     .tag-item a {
-        background: #e0f2fe;
-        color: #0369a1;
-        font-size: 0.7rem;
-        padding: 2px 8px;
-        border-radius: 9999px;
-        text-decoration: none;
-        font-weight: 500;
+        background: transparent;
+        color: var(--text-muted);
+        font-size: 16px;
+        padding: 0;
+        border-radius: 0;
+        text-decoration: underline;
+        text-decoration-color: var(--border);
     }
-    .tag-item a:hover { background: #bae6fd; }
-    
-    .status-badge {
-        font-size: 0.75rem;
-        padding: 4px 10px;
-        border-radius: 6px;
-        background: #f1f5f9;
-        color: #475569;
-        text-decoration: none;
-        display: inline-block;
+    .tag-item a:hover { 
+        color: var(--text);
+        text-decoration-color: var(--text);
     }
     
+    .rating-cell {
+        padding-right: 60px !important;
+    }
     .book-title {
         color: var(--text);
         font-weight: 600;
         text-decoration: none;
+        font-size: 16px;
+        display: block;
+        margin-bottom: 4px;
     }
-    .book-title:hover { color: var(--primary); }
+    .book-title:hover { text-decoration: underline; }
     
     .metadata-link {
-        color: #64748b;
+        color: var(--text-muted);
         text-decoration: none;
-        font-size: 0.9rem;
+        font-size: 16px;
     }
-    .metadata-link:hover { color: var(--primary); text-decoration: underline; }
+    .metadata-link:hover { color: var(--text); text-decoration: underline; }
 
     .loading-cover {
-        font-size: 0.7rem;
-        color: #94a3b8;
-        font-style: italic;
+        font-size: 12px;
+        color: var(--text-muted);
+        text-transform: uppercase;
+    }
+    
+    .rating-value {
+        color: #fbbf24;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    /* DataTables Overrides */
+    .dataTables_wrapper .dataTables_length, 
+    .dataTables_wrapper .dataTables_filter, 
+    .dataTables_wrapper .dataTables_info, 
+    .dataTables_wrapper .dataTables_paginate {
+        color: var(--text-muted) !important;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin: 2rem 0;
+    }
+    .dataTables_wrapper .dataTables_filter input {
+        background: transparent;
+        border: 1px solid var(--border);
+        border-radius: 0;
+        padding: 6px 10px;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        padding: 4px 8px !important;
+        border-radius: 0 !important;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+        background: var(--text) !important;
+        border: 1px solid var(--text) !important;
+        color: var(--bg) !important;
     }
 </style>
 
@@ -103,7 +138,6 @@
             <th>Author</th>
             <th>Rating</th>
             <th>Tags</th>
-            <th>Status</th>
         </tr>
     </thead>
     <tbody>
@@ -129,8 +163,8 @@
                 <td>
                     <a href="/books/authors/{{book.author.id}}" class="metadata-link">{{ book.author.name }}</a>
                 </td>
-                <td>
-                    <span style="color: #f59e0b; font-weight: 600;">★ {{ book.rating }}</span>
+                <td class="rating-cell">
+                    <span class="rating-value">★ {{ book.rating }}</span>
                 </td>
                 <td>
                     <ul class="tag-list">
@@ -140,9 +174,6 @@
                             </li>
                         {% endfor %}
                     </ul>
-                </td>
-                <td>
-                    <a href="/books/statuss/{{book.status.id}}" class="status-badge">{{ book.status.name }}</a>
                 </td>
             </tr>
         {% endfor %}
